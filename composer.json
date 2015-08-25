@@ -1,0 +1,37 @@
+{
+    "name": "abdala/omnipay-pagseguro",
+    "type": "library",
+    "description": "PagSeguro gateway for OmniPay",
+    "keywords": [
+        "pagseguro",
+        "mp",
+        "gateway",
+        "merchant",
+        "omnipay",
+        "pay",
+        "payment",
+        "PHPeste"
+    ],
+    "homepage": "https://github.com/abdala/omnipay-pagseguro",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abdala Cerqueira",
+            "email": "abdala.cerqueira@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Omnipay\\PagSeguro\\" : "src/" }
+    },
+    "require": {
+        "omnipay/common": "~2.0"
+    },
+    "require-dev": {
+        "omnipay/tests": "~2.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0"
+        }
+    }
+}
