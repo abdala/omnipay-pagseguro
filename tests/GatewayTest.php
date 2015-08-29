@@ -50,68 +50,16 @@ class GatewayTest extends GatewayTestCase
         $this->assertEquals('https://sandbox.pagseguro.uol.com.br/v2/checkout/payment.html?code=8CF4BE7DCECEF0F004A6DFA0A8243412', $response->getRedirectUrl());
     }
 
-    /*
-    public function testPurchaseFailure()
-    {
-        $this->setMockHttpResponse('ExpressPurchaseFailure.txt');
-
-        $response = $this->gateway->purchase($this->options)->send();
-
-        $this->assertFalse($response->isSuccessful());
-        $this->assertFalse($response->isRedirect());
-        $this->assertNull($response->getTransactionReference());
-        $this->assertSame('This transaction cannot be processed. The amount to be charged is zero.', $response->getMessage());
-    }
-
-  
-
     public function testCompletePurchaseHttpOptions()
     {
+        $this->setMockHttpResponse('CompletePurchaseSuccess.txt');
+        
+        $this->options['notificationCode'] = '9E884542-81B3-4419-9A75-BCC6FB495EF1';
+        
+        $response = $this->gateway->completePurchase($this->options)->send();
 
-        $this->setMockHttpResponse('ExpressPurchaseSuccess.txt');
-
-        $this->getHttpRequest()->query->replace(array(
-            'token' => 'GET_TOKEN',
-            'PayerID' => 'GET_PAYERID',
-        ));
-
-        $response = $this->gateway->completePurchase(array(
-            'amount' => '10.00',
-            'currency' => 'BYR'
-        ))->send();
-
-        $httpRequests = $this->getMockedRequests();
-        $httpRequest = $httpRequests[0];
-        $queryArguments = $httpRequest->getQuery()->toArray();
-        $this->assertSame('GET_TOKEN', $queryArguments['TOKEN']);
-        $this->assertSame('GET_PAYERID', $queryArguments['PAYERID']);
-
+        $this->assertInstanceOf('\Omnipay\PagSeguro\Message\CompletePurchaseResponse', $response);
+        $this->assertTrue($response->isSuccessful());
+        $this->assertSame('9E884542-81B3-4419-9A75-BCC6FB495EF1', $response->getData()['code']);
     }
-
-    public function testCompletePurchaseCustomOptions()
-    {
-
-        $this->setMockHttpResponse('ExpressPurchaseSuccess.txt');
-
-        // Those values should not be used if custom token or payerid are passed
-        $this->getHttpRequest()->query->replace(array(
-            'token' => 'GET_TOKEN',
-            'PayerID' => 'GET_PAYERID',
-        ));
-
-        $response = $this->gateway->completePurchase(array(
-            'amount' => '10.00',
-            'currency' => 'BYR',
-            'token' => 'CUSTOM_TOKEN',
-            'payerid' => 'CUSTOM_PAYERID'
-        ))->send();
-
-        $httpRequests = $this->getMockedRequests();
-        $httpRequest = $httpRequests[0];
-        $queryArguments = $httpRequest->getQuery()->toArray();
-        $this->assertSame('CUSTOM_TOKEN', $queryArguments['TOKEN']);
-        $this->assertSame('CUSTOM_PAYERID', $queryArguments['PAYERID']);
-
-    }
-*/
 }
