@@ -1,4 +1,4 @@
-# Omnipay: MercadoPago
+# Omnipay: PagSeguro
 
 **PagSeguro driver for the Omnipay PHP payment processing library**
 
