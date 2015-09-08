@@ -22,4 +22,9 @@
             <directory>./src</directory>
         </whitelist>
     </filter>
+    
+    <php>
+        <const name="PAGSEGURO_API_EMAIL" value="" />
+        <const name="PAGSEGURO_API_KEY" value="" />
+    </php>
 </phpunit>

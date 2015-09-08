@@ -28,8 +28,8 @@ class GatewayTest extends GatewayTestCase
         $this->gateway = new Gateway($this->getHttpClient(), $this->getHttpRequest());
 
         $this->options = array(
-            'email' => 'abdala.cerqueira@gmail.com',
-            'token' => 'A13FB5694A124A38A42CFE5624C0DE23',
+            'email' => PAGSEGURO_API_EMAIL,
+            'token' => PAGSEGURO_API_KEY,
             'sandbox' => true,
             'returnUrl' => 'https://www.example.com/return',
             'cancelUrl' => 'https://www.example.com/cancel',
