@@ -4,7 +4,7 @@ namespace Omnipay\PagSeguro\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 
-class CompletePurchaseResponse extends AbstractResponse
+class FindTransactionResponse extends AbstractResponse
 {
     public function isSuccessful()
     {
