@@ -1,9 +1,9 @@
-# Omnipay: MercadoPago
+# Omnipay: PagSeguro
 
 **PagSeguro driver for the Omnipay PHP payment processing library**
 
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment
-processing library for PHP 5.3+. This package implements MercadoPago support for Omnipay.
+processing library for PHP 5.3+. This package implements PagSeguro support for Omnipay.
 
 ## Installation
 
@@ -27,7 +27,7 @@ And run composer to update your dependencies:
 
 The following gateways are provided by this package:
 
-* MercadoPago
+* PagSeguro
 
 For general usage instructions, please see the main [Omnipay](https://github.com/thephpleague/omnipay)
 repository.
