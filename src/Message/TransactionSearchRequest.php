@@ -8,6 +8,24 @@ use Omnipay\Common\Exception\InvalidRequestException;
 class TransactionSearchRequest extends AbstractRequest
 {
     protected $resource = "transactions";
+    protected $abandonedResource = "transactions/abandoned";
+
+    /**
+     * @return boolean
+     */
+    public function getAbandoned()
+    {
+        return $this->getParameter('abandoned');
+    }
+
+    /**
+     * @param boolean $date
+     * @return \Omnipay\Common\Message\AbstractRequest
+     */
+    public function setAbandoned($value)
+    {
+        return $this->setParameter('abandoned', $value);
+    }
 
     /**
      * @return DateTime|null
@@ -132,5 +150,14 @@ class TransactionSearchRequest extends AbstractRequest
         $xml = $httpResponse->xml();
 
         return $this->createResponse($this->xml2array($xml));
+    }
+
+    public function getResource()
+    {
+        if ($this->getAbandoned()) {
+            return $this->abandonedResource;
+        } else {
+            return $this->resource;
+        }
     }
 }
