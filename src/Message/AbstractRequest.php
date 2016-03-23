@@ -2,7 +2,6 @@
 
 namespace Omnipay\PagSeguro\Message;
 
-
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
     protected $endpoint = 'https://ws.pagseguro.uol.com.br/v2';
