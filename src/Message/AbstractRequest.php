@@ -1,7 +1,4 @@
 <?php
-/**
- * PagSeguro Abstract Request
- */
 
 namespace Omnipay\PagSeguro\Message;
 
@@ -43,10 +40,11 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     
     public function getData()
     {
+        $this->validate('email', 'token');
+
         return [
             'email' => $this->getEmail(),
-            'token' => $this->getToken(),
-            'currency' => $this->getCurrency(),
+            'token' => $this->getToken()
         ];
     }
     
@@ -64,7 +62,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         $headers = [
             'headers' => ['Content-Type' => 'x-www-form-urlencoded; charset=UTF-8']
         ];
-        
+
         $httpResponse = $this->httpClient->post($url, $headers, $data)->send();
         $xml = $httpResponse->xml();
         

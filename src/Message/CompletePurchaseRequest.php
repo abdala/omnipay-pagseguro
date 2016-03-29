@@ -1,13 +1,10 @@
 <?php
-/**
- * PagSeguro Abstract Request
- */
 
 namespace Omnipay\PagSeguro\Message;
 
 class CompletePurchaseRequest extends AbstractRequest
 {
-    protected $resource = "transactions/notifications";
+    protected $resource = "transactions";
     
     public function getNotificationCode()
     {
