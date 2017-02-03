@@ -4,6 +4,7 @@ namespace Omnipay\PagSeguro\Message;
 
 use Omnipay\PagSeguro\Item;
 use Omnipay\PagSeguro\Support\Customer\Customer;
+use Omnipay\Common\Exception\InvalidRequestException;
 
 class PurchaseRequest extends AbstractRequest
 {
@@ -39,6 +40,36 @@ class PurchaseRequest extends AbstractRequest
     public function setCustomer(Customer $value)
     {
         return $this->setParameter('customer', $value);
+    }
+
+    public function getExtraAmount()
+    {
+        $extraAmount = $this->getParameter('extraAmount');
+
+        if ($extraAmount !== null && $extraAmount != 0) {
+            if ($this->getCurrencyDecimalPlaces() > 0) {
+                if (is_int($extraAmount) || (is_string($extraAmount) && false === strpos((string) $extraAmount, '.'))) {
+                    throw new InvalidRequestException(
+                        'Please specify extra amount as a string or float, with decimal places.'
+                    );
+                };
+            }
+
+            $extraAmount = $this->toFloat($extraAmount);
+
+            // Check for rounding that may occur if too many significant decimal digits are supplied.
+            $decimal_count = strlen(substr(strrchr(sprintf('%.8g', $extraAmount), '.'), 1));
+            if ($decimal_count > $this->getCurrencyDecimalPlaces()) {
+                throw new InvalidRequestException('Amount precision is too high for currency.');
+            }
+
+            return $this->formatCurrency($extraAmount);
+        }
+    }
+
+    public function setExtraAmount($value)
+    {
+        return $this->setParameter('extraAmount', $value);
     }
 
     public function setItems($items)
@@ -132,6 +163,7 @@ class PurchaseRequest extends AbstractRequest
 
         $data = [
             'currency' => $this->getCurrency(),
+            'extraAmount' => $this->getExtraAmount(),
             'reference' => $this->getTransactionReference(),
             'redirectURL' => $this->getReturnUrl(),
             'notificationURL' => $this->getNotifyUrl(),
