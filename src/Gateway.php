@@ -5,7 +5,7 @@ namespace Omnipay\PagSeguro;
 use Omnipay\Common\AbstractGateway;
 
 /**
- * MercadoPago Gateway
+ * PagSeguro Gateway
  *
  * @link https://pagseguro.uol.com.br/v2/guia-de-integracao/index.html
  *
