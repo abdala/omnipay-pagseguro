@@ -1,5 +1,5 @@
 {
-    "name": "jsgv/omnipay-pagseguro",
+    "name": "abdala/omnipay-pagseguro",
     "type": "library",
     "description": "PagSeguro gateway for OmniPay",
     "keywords": [
@@ -12,13 +12,9 @@
         "payment",
         "PHPeste"
     ],
-    "homepage": "https://github.com/jsgv/omnipay-pagseguro",
+    "homepage": "https://github.com/abdala/omnipay-pagseguro",
     "license": "MIT",
     "authors": [
-        {
-            "name": "Jesus Galvan",
-            "email": "j@pseudo.cc"
-        },
         {
             "name": "Abdala Cerqueira",
             "email": "abdala.cerqueira@gmail.com"
