@@ -41,7 +41,7 @@ class Gateway extends AbstractGateway
     {
         return $this->getParameter('email');
     }
-    
+
     public function setEmail($value)
     {
         return $this->setParameter('email', $value);
@@ -66,7 +66,7 @@ class Gateway extends AbstractGateway
     {
         return $this->setParameter('sandbox', $value);
     }
-    
+
     public function purchase(array $parameters = array())
     {
         return $this->createRequest('Omnipay\\PagSeguro\\Message\\PurchaseRequest', $parameters);
@@ -98,4 +98,7 @@ class Gateway extends AbstractGateway
         return $this->createRequest('Omnipay\\PagSeguro\\Message\\TransactionSearchRequest', $parameters);
     }
 
+    public function fetchNotification (array $parameters = array()) {
+        return $this->createRequest('Omnipay\\PagSeguro\\Message\\FetchNotificationRequest', $parameters);
+    }
 }
