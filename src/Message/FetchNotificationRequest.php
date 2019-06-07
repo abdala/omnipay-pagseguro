@@ -33,7 +33,7 @@ class FetchNotificationRequest extends AbstractRequest
                                       $this->getNotificationCode(),
                                       http_build_query($data, '', '&'));
 
-        $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url);
+        $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url, $this->getHeaders());
         $xml = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $this->createResponse($this->xml2array($xml));

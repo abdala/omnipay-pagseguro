@@ -58,6 +58,11 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->resource;
     }
 
+    public function getHeaders()
+    {
+        return ['Content-Type' => 'application/x-www-form-urlencoded'];
+    }
+
     public function sendData($data)
     {
         $url = sprintf('%s/%s?%s',
@@ -66,9 +71,9 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
                        http_build_query($data, '', '&')
                     );
 
-        $headers = ['Content-Type' => 'application/x-www-form-urlencoded'];
 
-        $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url, $headers);
+
+        $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url, $this->getHeaders());
         $xml = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $this->createResponse($this->xml2array($xml));
