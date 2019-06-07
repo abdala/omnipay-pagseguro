@@ -19,6 +19,11 @@ class FetchNotificationRequest extends AbstractRequest
         return $this->getParameter('notificationCode');
     }
 
+    public function getHttpMethod()
+    {
+        return 'GET';
+    }
+
     public function setNotificationCode($value)
     {
         return $this->setParameter('notificationCode', $value);
