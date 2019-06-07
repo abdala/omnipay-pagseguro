@@ -12,9 +12,14 @@ class TransactionSearchResponse extends AbstractResponse
         parent::__construct($request, $data);
 
         $transactions = array();
+
         if ($this->isSuccessful()) {
-            foreach ($this->getData()['transactions']['transaction'] as $transaction) {
-                $transactions[] = $this->xml2array($transaction);
+            if ($this->getData()['resultsInThisPage'] == 1) {
+                $transactions[] = $this->xml2array($this->getData()['transactions']['transaction']);
+            } else if ($this->getData()['resultsInThisPage'] > 0) {
+                foreach ($this->getData()['transactions']['transaction'] as $transaction) {
+                    $transactions[] = $this->xml2array($transaction);
+                }
             }
         }
 

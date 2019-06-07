@@ -21,6 +21,11 @@ class FindTransactionRequest extends AbstractRequest
         return $this->response = new FindTransactionResponse($this, $data);
     }
 
+    public function getHttpMethod()
+    {
+        return 'GET';
+    }
+
     public function sendData($data)
     {
         $url = sprintf('%s/%s/%s?%s', $this->getEndpoint(),
@@ -28,8 +33,8 @@ class FindTransactionRequest extends AbstractRequest
                                       $this->getTransactionID(),
                                       http_build_query($data, '', '&'));
 
-        $httpResponse = $this->httpClient->get($url)->send();
-        $xml = $httpResponse->xml();
+        $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url);
+        $xml = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $this->createResponse($this->xml2array($xml));
     }
