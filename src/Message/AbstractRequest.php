@@ -81,7 +81,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     protected function xml2array($xml)
     {
-        $arr = [];
+        $response = []; // or $result
 
         if ($xml == false) {
             return $arr;
