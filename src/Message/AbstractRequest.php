@@ -81,10 +81,10 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     protected function xml2array($xml)
     {
-        $response = []; // or $result
+        $response = [];
 
         if (! $xml) {
-            return $arr;
+            return $response;
         }
 
         foreach ($xml as $element) {
@@ -92,14 +92,14 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             $e   = get_object_vars($element);
 
             if (!empty($e)) {
-                $arr[$tag] = $element instanceof SimpleXMLElement ? xml2array($element) : $e;
+                $response[$tag] = $element instanceof SimpleXMLElement ? xml2array($element) : $e;
                 continue;
             }
 
-            $arr[$tag] = trim($element);
+            $response[$tag] = trim($element);
         }
 
-        return $arr;
+        return $response;
     }
 
     public function getEndpoint()
