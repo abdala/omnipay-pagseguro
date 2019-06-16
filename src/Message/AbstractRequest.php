@@ -48,30 +48,44 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         ];
     }
 
+    public function getHttpMethod()
+    {
+        return 'POST';
+    }
+
     public function getResource()
     {
         return $this->resource;
     }
 
+    public function getHeaders()
+    {
+        return ['Content-Type' => 'application/x-www-form-urlencoded'];
+    }
+
     public function sendData($data)
     {
-        $url = sprintf('%s/%s',
+        $url = sprintf('%s/%s?%s',
                        $this->getEndpoint(),
-                       trim($this->getResource(), '/'));
+                       trim($this->getResource(), '/'),
+                       http_build_query($data, '', '&')
+                    );
 
-        $headers = [
-            'headers' => ['Content-Type' => 'x-www-form-urlencoded; charset=UTF-8']
-        ];
 
-        $httpResponse = $this->httpClient->post($url, $headers, $data)->send();
-        $xml = $httpResponse->xml();
+
+        $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url, $this->getHeaders());
+        $xml = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $this->createResponse($this->xml2array($xml));
     }
 
     protected function xml2array($xml)
     {
-        $arr = [];
+        $response = []; // or $result
+
+        if (! $xml) {
+            return $arr;
+        }
 
         foreach ($xml as $element) {
             $tag = $element->getName();
