@@ -13,7 +13,7 @@ to your `composer.json` file:
 ```json
 {
     "require": {
-        "abdala/omnipay-pagseguro": "~1.0"
+        "abdala/omnipay-pagseguro": "~0.3.0"
     }
 }
 ```
