@@ -1,45 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\PagSeguro\Message;
 
 use DateTime;
 use Omnipay\Common\Exception\InvalidRequestException;
+use function array_merge;
+use function http_build_query;
+use function simplexml_load_string;
+use function sprintf;
+use const LIBXML_NOCDATA;
 
 class TransactionSearchRequest extends AbstractRequest
 {
-    protected $resource = "transactions";
-    protected $abandonedResource = "transactions/abandoned";
+    protected $resource          = 'transactions';
+    protected $abandonedResource = 'transactions/abandoned';
 
-    /**
-     * @return boolean
-     */
-    public function getAbandoned()
+    public function getAbandoned() : bool
     {
         return $this->getParameter('abandoned');
     }
 
-    /**
-     * @param boolean $date
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function setAbandoned($value)
+    public function setAbandoned($value) : \Omnipay\Common\Message\AbstractRequest
     {
         return $this->setParameter('abandoned', $value);
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getStartDate()
+    public function getStartDate() : ?DateTime
     {
         return $this->getParameter('startDate');
     }
 
     /**
      * @param DateTime|string $date
-     * @return \Omnipay\Common\Message\AbstractRequest
      */
-    public function setStartDate($date)
+    public function setStartDate($date) : \Omnipay\Common\Message\AbstractRequest
     {
         if (! $date instanceof DateTime) {
             $date = new DateTime($date);
@@ -48,19 +44,15 @@ class TransactionSearchRequest extends AbstractRequest
         return $this->setParameter('startDate', $date);
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getEndDate()
+    public function getEndDate() : ?DateTime
     {
         return $this->getParameter('endDate');
     }
 
     /**
      * @param DateTime|string $date
-     * @return \Omnipay\Common\Message\AbstractRequest
      */
-    public function setEndDate($date)
+    public function setEndDate($date) : \Omnipay\Common\Message\AbstractRequest
     {
         if (! $date instanceof DateTime) {
             $date = new DateTime($date);
@@ -69,36 +61,22 @@ class TransactionSearchRequest extends AbstractRequest
         return $this->setParameter('endDate', $date);
     }
 
-    /**
-     * @return null
-     */
     public function getPage()
     {
         return $this->getParameter('page');
     }
 
-    /**
-     * @param string $page
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function setPage($page)
+    public function setPage(string $page) : \Omnipay\Common\Message\AbstractRequest
     {
         return $this->setParameter('page', $page);
     }
 
-    /**
-     * @return null
-     */
     public function getMaxPageResults()
     {
         return $this->getParameter('maxPageResults');
     }
 
-    /**
-     * @param int $maxPageResults
-     * @return \Omnipay\Common\Message\AbstractRequest
-     */
-    public function setMaxPageResults($maxPageResults)
+    public function setMaxPageResults(int $maxPageResults) : \Omnipay\Common\Message\AbstractRequest
     {
         return $this->setParameter('maxPageResults', $maxPageResults);
     }
@@ -112,21 +90,22 @@ class TransactionSearchRequest extends AbstractRequest
     {
         $this->validate('startDate', 'endDate');
 
-        $now = new DateTime('now');
+        $now       = new DateTime('now');
         $startDate = $this->getStartDate();
         $finalDate = $this->getEndDate();
 
         //Start Date and End Date less than today
         if ($startDate >= $now) {
-            throw new InvalidRequestException("The initial date must be less than today");
+            throw new InvalidRequestException('The initial date must be less than today');
         }
+
         if ($finalDate >= $now) {
-            throw new InvalidRequestException("The final date must be less than today");
+            throw new InvalidRequestException('The final date must be less than today');
         }
 
         //The interval between the initial date and final date must be less than 30 days
         if ($startDate->diff($finalDate)->days > 30) {
-            throw new InvalidRequestException("The interval between the initial date and final date must be less than 30 days");
+            throw new InvalidRequestException('The interval between the initial date and final date must be less than 30 days');
         }
 
         $data = [
@@ -146,13 +125,15 @@ class TransactionSearchRequest extends AbstractRequest
 
     public function sendData($data)
     {
-        $url = sprintf('%s/%s?%s',
+        $url = sprintf(
+            '%s/%s?%s',
             $this->getEndpoint(),
             $this->getResource(),
-            http_build_query($data, '', '&'));
+            http_build_query($data, '', '&')
+        );
 
         $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url);
-        $xml = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $xml          = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $this->createResponse($this->xml2array($xml));
     }
@@ -161,8 +142,8 @@ class TransactionSearchRequest extends AbstractRequest
     {
         if ($this->getAbandoned()) {
             return $this->abandonedResource;
-        } else {
-            return $this->resource;
         }
+
+        return $this->resource;
     }
 }

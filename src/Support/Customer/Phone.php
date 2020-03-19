@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\PagSeguro\Support\Customer;
 
 use Omnipay\Common\Helper;
@@ -10,7 +12,7 @@ class Phone
     /**
      * Internal storage of all of the card parameters.
      *
-     * @var \Symfony\Component\HttpFoundation\ParameterBag
+     * @var ParameterBag
      */
     protected $parameters;
 
@@ -19,7 +21,7 @@ class Phone
      *
      * @param array $parameters
      */
-    public function __construct($parameters = null)
+    public function __construct(?array $parameters = null)
     {
         $this->initialize($parameters);
     }
@@ -30,11 +32,12 @@ class Phone
      * If any unknown parameters passed, they will be ignored.
      *
      * @param array $parameters An associative array of parameters
+     *
      * @return $this
      */
-    public function initialize($parameters = null)
+    public function initialize(?array $parameters = null)
     {
-        $this->parameters = new ParameterBag;
+        $this->parameters = new ParameterBag();
 
         Helper::initialize($this, $parameters);
 
@@ -46,7 +49,7 @@ class Phone
      *
      * @return array An associative array of parameters.
      */
-    public function getParameters()
+    public function getParameters() : array
     {
         return $this->parameters->all();
     }
@@ -64,11 +67,12 @@ class Phone
     /**
      * Set one parameter.
      *
-     * @param string $key Parameter key
-     * @param mixed $value Parameter value
+     * @param string $key   Parameter key
+     * @param mixed  $value Parameter value
+     *
      * @return $this
      */
-    protected function setParameter($key, $value)
+    protected function setParameter(string $key, $value)
     {
         $this->parameters->set($key, $value);
 
@@ -78,20 +82,17 @@ class Phone
     /**
      * Sets area code.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setAreaCode($value)
+    public function setAreaCode(string $value)
     {
         return $this->setParameter('areaCode', $value);
     }
 
     /**
      * Get area code.
-     *
-     * @return string
      */
-    public function getAreaCode()
+    public function getAreaCode() : string
     {
         return $this->getParameter('areaCode');
     }
@@ -99,20 +100,17 @@ class Phone
     /**
      * Sets phone.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setPhone($value)
+    public function setPhone(string $value)
     {
         return $this->setParameter('phone', $value);
     }
 
     /**
      * Get phone.
-     *
-     * @return string
      */
-    public function getPhone()
+    public function getPhone() : string
     {
         return $this->getParameter('phone');
     }

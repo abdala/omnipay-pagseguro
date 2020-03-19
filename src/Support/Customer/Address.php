@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\PagSeguro\Support\Customer;
 
 use Omnipay\Common\Helper;
@@ -10,21 +12,18 @@ class Address
     /**
      * Internal storage of all of the card parameters.
      *
-     * @var \Symfony\Component\HttpFoundation\ParameterBag
+     * @var ParameterBag
      */
     protected $parameters;
-
 
     /**
      * Create a new object using the specified parameters
      *
      * @param array $parameters
      */
-    public function __construct($parameters = null)
+    public function __construct(?array $parameters = null)
     {
         $this->initialize($parameters);
-
-        $this->getCountry('BRA');
     }
 
     /**
@@ -33,11 +32,12 @@ class Address
      * If any unknown parameters passed, they will be ignored.
      *
      * @param array $parameters An associative array of parameters
+     *
      * @return $this
      */
-    public function initialize($parameters = null)
+    public function initialize(?array $parameters = null)
     {
-        $this->parameters = new ParameterBag;
+        $this->parameters = new ParameterBag();
 
         Helper::initialize($this, $parameters);
 
@@ -49,7 +49,7 @@ class Address
      *
      * @return array An associative array of parameters.
      */
-    public function getParameters()
+    public function getParameters() : array
     {
         return $this->parameters->all();
     }
@@ -67,11 +67,12 @@ class Address
     /**
      * Set one parameter.
      *
-     * @param string $key Parameter key
-     * @param mixed $value Parameter value
+     * @param string $key   Parameter key
+     * @param mixed  $value Parameter value
+     *
      * @return $this
      */
-    protected function setParameter($key, $value)
+    protected function setParameter(string $key, $value)
     {
         $this->parameters->set($key, $value);
 
@@ -81,20 +82,17 @@ class Address
     /**
      * Sets country.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setCountry($value)
+    public function setCountry(string $value)
     {
         return $this->setParameter('country', $value);
     }
 
     /**
      * Get country.
-     *
-     * @return string
      */
-    public function getCountry()
+    public function getCountry() : string
     {
         return $this->getParameter('country');
     }
@@ -102,20 +100,17 @@ class Address
     /**
      * Sets state.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setState($value)
+    public function setState(string $value)
     {
         return $this->setParameter('state', $value);
     }
 
     /**
      * Get state.
-     *
-     * @return string
      */
-    public function getState()
+    public function getState() : string
     {
         return $this->getParameter('state');
     }
@@ -123,20 +118,17 @@ class Address
     /**
      * Sets city.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setCity($value)
+    public function setCity(string $value)
     {
         return $this->setParameter('city', $value);
     }
 
     /**
      * Get city.
-     *
-     * @return string
      */
-    public function getCity()
+    public function getCity() : string
     {
         return $this->getParameter('city');
     }
@@ -144,42 +136,35 @@ class Address
     /**
      * Sets postal code.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setPostalCode($value)
+    public function setPostalCode(string $value)
     {
         return $this->setParameter('postalCode', $value);
     }
 
     /**
      * Get postal code.
-     *
-     * @return string
      */
-    public function getPostalCode()
+    public function getPostalCode() : string
     {
         return $this->getParameter('postalCode');
     }
 
-
     /**
      * Sets postal district.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setDistrict($value)
+    public function setDistrict(string $value)
     {
         return $this->setParameter('district', $value);
     }
 
     /**
      * Get postal district.
-     *
-     * @return string
      */
-    public function getDistrict()
+    public function getDistrict() : string
     {
         return $this->getParameter('district');
     }
@@ -187,20 +172,17 @@ class Address
     /**
      * Sets street.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setStreet($value)
+    public function setStreet(string $value)
     {
         return $this->setParameter('street', $value);
     }
 
     /**
      * Get street.
-     *
-     * @return string
      */
-    public function getStreet()
+    public function getStreet() : string
     {
         return $this->getParameter('street');
     }
@@ -208,20 +190,17 @@ class Address
     /**
      * Sets number.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setNumber($value)
+    public function setNumber(string $value)
     {
         return $this->setParameter('number', $value);
     }
 
     /**
      * Get number.
-     *
-     * @return string
      */
-    public function getNumber()
+    public function getNumber() : string
     {
         return $this->getParameter('number');
     }
@@ -229,20 +208,17 @@ class Address
     /**
      * Sets complement.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setComplement($value)
+    public function setComplement(string $value)
     {
         return $this->setParameter('complement', $value);
     }
 
     /**
      * Get complement.
-     *
-     * @return string
      */
-    public function getComplement()
+    public function getComplement() : string
     {
         return $this->getParameter('complement');
     }

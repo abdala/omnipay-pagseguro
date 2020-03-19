@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\PagSeguro\Support\Customer;
 
 use Omnipay\Common\Helper;
@@ -10,7 +12,7 @@ class Customer
     /**
      * Internal storage of all of the card parameters.
      *
-     * @var \Symfony\Component\HttpFoundation\ParameterBag
+     * @var ParameterBag
      */
     protected $parameters;
 
@@ -18,10 +20,8 @@ class Customer
      * Create a new object using the specified parameters
      *
      * @param array $parameters
-     * @param Phone $phone
-     * @param Address $address
      */
-    public function __construct($parameters = null, Phone $phone = null, Address $address = null)
+    public function __construct(?array $parameters = null, ?Phone $phone = null, ?Address $address = null)
     {
         $this->initialize($parameters);
 
@@ -35,11 +35,12 @@ class Customer
      * If any unknown parameters passed, they will be ignored.
      *
      * @param array $parameters An associative array of parameters
+     *
      * @return $this
      */
-    public function initialize($parameters = null)
+    public function initialize(?array $parameters = null)
     {
-        $this->parameters = new ParameterBag;
+        $this->parameters = new ParameterBag();
 
         Helper::initialize($this, $parameters);
 
@@ -51,7 +52,7 @@ class Customer
      *
      * @return array An associative array of parameters.
      */
-    public function getParameters()
+    public function getParameters() : array
     {
         return $this->parameters->all();
     }
@@ -69,11 +70,12 @@ class Customer
     /**
      * Set one parameter.
      *
-     * @param string $key Parameter key
-     * @param mixed $value Parameter value
+     * @param string $key   Parameter key
+     * @param mixed  $value Parameter value
+     *
      * @return $this
      */
-    protected function setParameter($key, $value)
+    protected function setParameter(string $key, $value)
     {
         $this->parameters->set($key, $value);
 
@@ -83,42 +85,35 @@ class Customer
     /**
      * Sets email.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setEmail($value)
+    public function setEmail(string $value)
     {
         return $this->setParameter('email', $value);
     }
 
     /**
      * Get email.
-     *
-     * @return string
      */
-    public function getEmail()
+    public function getEmail() : string
     {
         return $this->getParameter('email');
     }
 
-
     /**
      * Sets name.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setName($value)
+    public function setName(string $value)
     {
         return $this->setParameter('name', $value);
     }
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->getParameter('name');
     }
@@ -126,20 +121,17 @@ class Customer
     /**
      * Sets cpf.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setCPF($value)
+    public function setCPF(string $value)
     {
         return $this->setParameter('cpf', $value);
     }
 
     /**
      * Get cpf.
-     *
-     * @return string
      */
-    public function getCPF()
+    public function getCPF() : string
     {
         return $this->getParameter('cpf');
     }
@@ -147,20 +139,17 @@ class Customer
     /**
      * Sets born date.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setBornDate($value)
+    public function setBornDate(string $value)
     {
         return $this->setParameter('bornDate', $value);
     }
 
     /**
      * Get born date.
-     *
-     * @return string
      */
-    public function getBornDate()
+    public function getBornDate() : string
     {
         return $this->getParameter('bornDate');
     }
@@ -168,24 +157,17 @@ class Customer
     /**
      * Sets Phone.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setPhone($value)
+    public function setPhone(Phone $value)
     {
-        if (!$value instanceof Phone) {
-            $value = new Phone();
-        }
-
         return $this->setParameter('phone', $value);
     }
 
     /**
      * Get Phone.
-     *
-     * @return Phone
      */
-    public function getPhone()
+    public function getPhone() : Phone
     {
         return $this->getParameter('phone');
     }
@@ -193,24 +175,17 @@ class Customer
     /**
      * Sets Address.
      *
-     * @param string $value
      * @return $this.
      */
-    public function setAddress($value)
+    public function setAddress(Address $value)
     {
-        if (!$value instanceof Address) {
-            $value = new Address();
-        }
-
         return $this->setParameter('address', $value);
     }
 
     /**
      * Get Address.
-     *
-     * @return Address
      */
-    public function getAddress()
+    public function getAddress() : Address
     {
         return $this->getParameter('address');
     }

@@ -1,16 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\PagSeguro\Message;
 
+use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\PagSeguro\Item;
 use Omnipay\PagSeguro\Support\Customer\Customer;
-use Omnipay\Common\Exception\InvalidRequestException;
+use function array_merge;
+use function is_int;
+use function is_string;
+use function sprintf;
+use function strlen;
+use function strpos;
+use function strrchr;
+use function substr;
 
 class PurchaseRequest extends AbstractRequest
 {
-    protected $resource = "checkout";
+    protected $resource = 'checkout';
 
-    protected $shippingType = "3";
+    protected $shippingType = '3';
 
     public function getShippingType()
     {
@@ -46,16 +56,14 @@ class PurchaseRequest extends AbstractRequest
     {
         $extraAmount = $this->getParameter('extraAmount');
 
-        if ($extraAmount !== null && $extraAmount != 0) {
+        if ($extraAmount !== null && $extraAmount !== 0) {
             if ($this->getCurrencyDecimalPlaces() > 0) {
-                if (is_int($extraAmount) || (is_string($extraAmount) && false === strpos((string) $extraAmount, '.'))) {
+                if (is_int($extraAmount) || (is_string($extraAmount) && strpos((string) $extraAmount, '.') === false)) {
                     throw new InvalidRequestException(
                         'Please specify extra amount as a string or float, with decimal places.'
                     );
-                };
+                }
             }
-
-            $extraAmount = $this->toFloat($extraAmount);
 
             // Check for rounding that may occur if too many significant decimal digits are supplied.
             $decimal_count = strlen(substr(strrchr(sprintf('%.8g', $extraAmount), '.'), 1));
@@ -93,17 +101,17 @@ class PurchaseRequest extends AbstractRequest
 
     protected function getItemData()
     {
-        $data = [];
+        $data  = [];
         $items = $this->getItems();
-        
+
         if ($items) {
             foreach ($items as $n => $item) {
-                $i = $n + 1;
-                $data["itemId$i"] = $item->getName();
+                $i                         = $n + 1;
+                $data["itemId$i"]          = $item->getName();
                 $data["itemDescription$i"] = $item->getDescription();
-                $data["itemAmount$i"] = $this->formatCurrency($item->getPrice());
-                $data["itemQuantity$i"] = $item->getQuantity();
-                $data["itemWeight$i"] = $item->getWeight();
+                $data["itemAmount$i"]      = $this->formatCurrency($item->getPrice());
+                $data["itemQuantity$i"]    = $item->getQuantity();
+                $data["itemWeight$i"]      = $item->getWeight();
             }
         }
 
@@ -112,19 +120,19 @@ class PurchaseRequest extends AbstractRequest
 
     protected function getCustomerData()
     {
-        $data = [];
+        $data     = [];
         $customer = $this->getCustomer();
 
         if ($customer) {
-            $data['senderEmail'] = $customer->getEmail();
-            $data['senderName'] = $customer->getName();
-            $data['senderCPF'] = $customer->getCPF();
+            $data['senderEmail']    = $customer->getEmail();
+            $data['senderName']     = $customer->getName();
+            $data['senderCPF']      = $customer->getCPF();
             $data['senderBornDate'] = $customer->getBornDate();
 
             $phone = $customer->getPhone();
             if ($phone->getParameters()) {
                 $data['senderAreaCode'] = $phone->getAreaCode();
-                $data['senderPhone'] = $phone->getPhone();
+                $data['senderPhone']    = $phone->getPhone();
             }
         }
 
@@ -135,28 +143,28 @@ class PurchaseRequest extends AbstractRequest
     {
         $data = [];
 
-        $data['shippingType'] = !empty($this->getShippingType()) ? $this->getShippingType() : $this->shippingType;
-        $data['shippingCost'] = !empty($this->getShippingCost()) ? $this->formatCurrency($this->getShippingCost()) : '0.00';
+        $data['shippingType'] = ! empty($this->getShippingType()) ? $this->getShippingType() : $this->shippingType;
+        $data['shippingCost'] = ! empty($this->getShippingCost()) ? $this->formatCurrency($this->getShippingCost()) : '0.00';
 
         $customer = $this->getCustomer();
         if ($customer) {
             $address = $customer->getAddress();
 
             if ($address->getParameters()) {
-                $data['shippingAddressCountry'] = $address->getCountry();
-                $data['shippingAddressState'] = $address->getState();
-                $data['shippingAddressCity'] = $address->getCity();
+                $data['shippingAddressCountry']    = $address->getCountry();
+                $data['shippingAddressState']      = $address->getState();
+                $data['shippingAddressCity']       = $address->getCity();
                 $data['shippingAddressPostalCode'] = $address->getPostalCode();
-                $data['shippingAddressDistrict'] = $address->getDistrict();
-                $data['shippingAddressStreet'] = $address->getStreet();
-                $data['shippingAddressNumber'] = $address->getNumber();
+                $data['shippingAddressDistrict']   = $address->getDistrict();
+                $data['shippingAddressStreet']     = $address->getStreet();
+                $data['shippingAddressNumber']     = $address->getNumber();
                 $data['shippingAddressComplement'] = $address->getComplement();
             }
         }
 
         return $data;
     }
-    
+
     public function getData()
     {
         $this->validate('currency', 'transactionReference');
@@ -171,7 +179,7 @@ class PurchaseRequest extends AbstractRequest
 
         return array_merge(parent::getData(), $data, $this->getItemData(), $this->getCustomerData(), $this->getShippingData());
     }
-    
+
     protected function createResponse($data)
     {
         return $this->response = new PurchaseResponse($this, $data);

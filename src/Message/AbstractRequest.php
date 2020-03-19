@@ -1,12 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\PagSeguro\Message;
+
+use function http_build_query;
+use function json_decode;
+use function json_encode;
+use function simplexml_load_string;
+use function sprintf;
+use function trim;
+use const LIBXML_NOCDATA;
 
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
-    protected $endpoint = 'https://ws.pagseguro.uol.com.br/v2';
+    protected $endpoint        = 'https://ws.pagseguro.uol.com.br/v2';
     protected $sandboxEndpoint = 'https://ws.sandbox.pagseguro.uol.com.br/v2';
-    protected $resource = '';
+    protected $resource        = '';
+
+    abstract protected function createResponse($data) : void;
 
     public function getEmail()
     {
@@ -44,7 +56,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
         return [
             'email' => $this->getEmail(),
-            'token' => $this->getToken()
+            'token' => $this->getToken(),
         ];
     }
 
@@ -65,45 +77,26 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     public function sendData($data)
     {
-        $url = sprintf('%s/%s?%s',
-                       $this->getEndpoint(),
-                       trim($this->getResource(), '/'),
-                       http_build_query($data, '', '&')
-                    );
-
-
+        $url = sprintf(
+            '%s/%s?%s',
+            $this->getEndpoint(),
+            trim($this->getResource(), '/'),
+            http_build_query($data, '', '&')
+        );
 
         $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url, $this->getHeaders());
-        $xml = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $xml          = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $this->createResponse($this->xml2array($xml));
-    }
-
-    protected function xml2array($xml)
-    {
-        $response = [];
-
-        if (! $xml) {
-            return $response;
-        }
-
-        foreach ($xml as $element) {
-            $tag = $element->getName();
-            $e   = get_object_vars($element);
-
-            if (!empty($e)) {
-                $response[$tag] = $element instanceof SimpleXMLElement ? xml2array($element) : $e;
-                continue;
-            }
-
-            $response[$tag] = trim($element);
-        }
-
-        return $response;
     }
 
     public function getEndpoint()
     {
         return $this->getSandbox() ? $this->sandboxEndpoint : $this->endpoint;
+    }
+
+    protected function xml2array($xml)
+    {
+        return json_decode(json_encode($xml), true);
     }
 }

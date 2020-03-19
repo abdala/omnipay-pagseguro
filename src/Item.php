@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\PagSeguro;
 
 use Omnipay\Common\Item as BaseItem;

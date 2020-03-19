@@ -30,6 +30,8 @@ class GatewayTest extends GatewayTestCase
         $this->options = array(
             'email' => PAGSEGURO_API_EMAIL,
             'token' => PAGSEGURO_API_KEY,
+            'currency' => 'BRL',
+            'transactionReference' => 'ref',
             'sandbox' => true,
             'returnUrl' => 'https://www.example.com/return',
             'cancelUrl' => 'https://www.example.com/cancel',

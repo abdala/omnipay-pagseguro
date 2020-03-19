@@ -1,10 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\PagSeguro\Message;
+
+use function http_build_query;
+use function simplexml_load_string;
+use function sprintf;
+use const LIBXML_NOCDATA;
 
 class FindTransactionRequest extends AbstractRequest
 {
-    protected $resource = "transactions";
+    protected $resource = 'transactions';
 
     public function getTransactionID()
     {
@@ -28,13 +35,16 @@ class FindTransactionRequest extends AbstractRequest
 
     public function sendData($data)
     {
-        $url = sprintf('%s/%s/%s?%s', $this->getEndpoint(),
-                                      $this->getResource(),
-                                      $this->getTransactionID(),
-                                      http_build_query($data, '', '&'));
+        $url = sprintf(
+            '%s/%s/%s?%s',
+            $this->getEndpoint(),
+            $this->getResource(),
+            $this->getTransactionID(),
+            http_build_query($data, '', '&')
+        );
 
         $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url);
-        $xml = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $xml          = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $this->createResponse($this->xml2array($xml));
     }

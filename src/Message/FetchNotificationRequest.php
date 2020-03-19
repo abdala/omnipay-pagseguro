@@ -1,6 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Omnipay\PagSeguro\Message;
+
+use function http_build_query;
+use function simplexml_load_string;
+use function sprintf;
+use const LIBXML_NOCDATA;
 /*
  * PagSeguro Fetch Notification Request
  *
@@ -10,9 +17,9 @@ namespace Omnipay\PagSeguro\Message;
 
 class FetchNotificationRequest extends AbstractRequest
 {
-    protected $endpoint = 'https://ws.pagseguro.uol.com.br/v3';
+    protected $endpoint        = 'https://ws.pagseguro.uol.com.br/v3';
     protected $sandboxEndpoint = 'https://ws.sandbox.pagseguro.uol.com.br/v3';
-    protected $resource = "transactions/notifications";
+    protected $resource        = 'transactions/notifications';
 
     public function getNotificationCode()
     {
@@ -33,13 +40,16 @@ class FetchNotificationRequest extends AbstractRequest
     {
         $this->validate('notificationCode');
 
-        $url = sprintf('%s/%s/%s?%s', $this->getEndpoint(),
-                                      $this->getResource(),
-                                      $this->getNotificationCode(),
-                                      http_build_query($data, '', '&'));
+        $url = sprintf(
+            '%s/%s/%s?%s',
+            $this->getEndpoint(),
+            $this->getResource(),
+            $this->getNotificationCode(),
+            http_build_query($data, '', '&')
+        );
 
         $httpResponse = $this->httpClient->request($this->getHttpMethod(), $url, $this->getHeaders());
-        $xml = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $xml          = simplexml_load_string($httpResponse->getBody()->getContents(), 'SimpleXMLElement', LIBXML_NOCDATA);
 
         return $this->createResponse($this->xml2array($xml));
     }
