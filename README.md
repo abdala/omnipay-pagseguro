@@ -3,7 +3,7 @@
 **PagSeguro driver for the Omnipay PHP payment processing library**
 
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment
-processing library for PHP 5.3+. This package implements PagSeguro support for Omnipay.
+processing library for PHP. This package implements PagSeguro support for Omnipay.
 
 ## Installation
 
@@ -13,7 +13,7 @@ to your `composer.json` file:
 ```json
 {
     "require": {
-        "abdala/omnipay-pagseguro": "^0.3"
+        "abdala/omnipay-pagseguro": "^1.3.0"
     }
 }
 ```
