@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/abdala/omnipay-pagseguro.svg?branch=master)](https://travis-ci.org/abdala/omnipay-pagseguro)
 # Omnipay: PagSeguro
 
 **PagSeguro driver for the Omnipay PHP payment processing library**
