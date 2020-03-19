@@ -18,7 +18,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     protected $sandboxEndpoint = 'https://ws.sandbox.pagseguro.uol.com.br/v2';
     protected $resource        = '';
 
-    abstract protected function createResponse($data) : void;
+    abstract protected function createResponse($data);
 
     public function getEmail()
     {
